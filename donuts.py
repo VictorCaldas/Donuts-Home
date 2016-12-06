@@ -37,7 +37,7 @@ def api_rotas():
             return "415 Unsupported Media Type ;)"
     else:
         cur.execute("SELECT * FROM ROTAS")
-        conn.close()7t7t
+        conn.close()
         json_string = json.dumps(dict(cur.fetchall()))
         return json_string
 
