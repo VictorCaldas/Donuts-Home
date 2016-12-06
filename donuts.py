@@ -7,11 +7,11 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'GET'])
 def hello():
-    if request.method == 'POST':
-        return "Hello World! POST"
+    if request.method == 'GET':
+        return "Projeto DOnuts!"
 
     else:
-        return "Hello World! GET"
+        return "Hello World! POST"
 
 
 @app.route('/rotas', methods=['POST', 'GET'])
@@ -37,7 +37,7 @@ def api_rotas():
             return "415 Unsupported Media Type ;)"
     else:
         cur.execute("SELECT * FROM ROTAS")
-        conn.close()
+        conn.close()7t7t
         json_string = json.dumps(dict(cur.fetchall()))
         return json_string
 
