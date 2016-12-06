@@ -1,17 +1,32 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, json
 import sqlite3
-from flask import json
+
 
 app = Flask(__name__)
+
+
 
 
 @app.route('/', methods=['POST', 'GET'])
 def hello():
     if request.method == 'GET':
-        return "Projeto DOnuts!"
-
+        return "Projeto Donuts!"
     else:
-        return "Hello World! POST"
+        return "Hello World! This is My POST"
+
+
+
+
+def query_db(query, args=(), one=False):
+    conn = sqlite3.connect("rotas.db")
+    cur = conn.cursor()
+    cur.execute(query, args)
+    r = [dict((cur.description[i][0], value) \
+              for i, value in enumerate(row)) for row in cur.fetchall()]
+    cur.connection.close()
+    return (r[0] if r else None) if one else r
+
+
 
 
 @app.route('/rotas', methods=['POST', 'GET'])
@@ -28,18 +43,14 @@ def api_rotas():
             conn.commit()
             conn.close()
             return "OK!"
-        elif request.headers['Content-Type'] == 'application/octet-stream':
-            f = open('./binary', 'wb')
-            f.write(request.data)
-            f.close()
-            return "Binary message written!"
         else:
             return "415 Unsupported Media Type ;)"
     else:
-        cur.execute("SELECT * FROM ROTAS")
-        conn.close()
-        json_string = json.dumps(dict(cur.fetchall()))
-        return json_string
+        my_query = query_db("SELECT * FROM ROTAS")
+        json_output = json.dumps(my_query)
+        return json_output
+
+
 
 
 if __name__ == "__main__":
