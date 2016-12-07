@@ -1,10 +1,9 @@
+import os
+
 from flask import Flask, request, jsonify, json
 import sqlite3
 
-
 app = Flask(__name__)
-
-
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -15,8 +14,6 @@ def hello():
         return "Hello World! This is My POST"
 
 
-
-
 def query_db(query, args=(), one=False):
     conn = sqlite3.connect("rotas.db")
     cur = conn.cursor()
@@ -25,8 +22,6 @@ def query_db(query, args=(), one=False):
               for i, value in enumerate(row)) for row in cur.fetchall()]
     cur.connection.close()
     return (r[0] if r else None) if one else r
-
-
 
 
 @app.route('/rotas', methods=['POST', 'GET'])
@@ -51,7 +46,6 @@ def api_rotas():
         return json_output
 
 
-
-
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
