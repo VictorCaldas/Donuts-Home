@@ -1,4 +1,5 @@
 # Home
-Backend My TCC and developing for the first time in Python <3
 
-Python + flask + sqlite + love
+This application is part of my final project.
+
+Backend that connects the two parts of my project saving in the database and passing the information of way with transit
