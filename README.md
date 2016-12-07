@@ -1,4 +1,4 @@
 # Home
-Backend My TCC and developer first time in Python <3
+Backend My TCC and developing for the first time in Python <3
 
 Python + flask + sqlite + love
