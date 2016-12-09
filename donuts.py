@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 
 from flask import Flask, request, jsonify, json
@@ -10,8 +11,6 @@ app = Flask(__name__)
 def hello():
     if request.method == 'GET':
         return "Projeto Donuts!"
-    else:
-        return "Hello World! This is My POST"
 
 
 def query_db(query, args=(), one=False):
@@ -33,16 +32,18 @@ def api_rotas():
             return "Text Message: " + request.data
         elif request.headers['Content-Type'] == 'application/json':
             d = json.loads(request.data)
-            row = (d['latitude'], d['longitude'], d['time'], d['speed'], d['rvc_name'])
-            cur.execute("INSERT INTO ROTAS(LATITUDE, LONGITUDE, TIME, SPEED, RVC_NAME) VALUES (?,?,?,?,?)", row)
+            row = (d['latitude'], d['longitude'], d['time'], d['speed'], d['rvc_name'], d['street_name'], d['car_name'])
+            cur.execute(
+                "INSERT INTO ROTAS(LATITUDE, LONGITUDE, TIME, SPEED, RVC_NAME, STREET_NAME, CAR_NAME) VALUES (?,?,?,?,?,?,?)", row)
             conn.commit()
             conn.close()
-            return "OK!"
+            return "OK!! Foi Adicionado a Informação com sucesso"
         else:
             return "415 Unsupported Media Type ;)"
     else:
-        my_query = query_db("SELECT * FROM ROTAS")
-        json_output = json.dumps(my_query)
+        my_query_all = query_db("SELECT * FROM ROTAS")
+        my_query_last = query_db("SELECT * FROM ROTAS WHERE ID = (SELECT MAX(ID) FROM ROTAS)")
+        json_output = json.dumps(my_query_last)
         return json_output
 
 
